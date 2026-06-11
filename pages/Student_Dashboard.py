@@ -17,6 +17,7 @@ st.set_page_config(                                           # must be the firs
     page_title="Check In — VERIFACE",                         # browser-tab title
     page_icon="🟢",                                           # browser-tab icon
     layout="centered",                                        # a kiosk works best as one centered column
+    initial_sidebar_state="collapsed",                        # the kiosk has no sidebar content, keep it tucked away
 )
 
 ui.inject_css()                                               # apply the theme

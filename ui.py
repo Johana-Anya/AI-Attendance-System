@@ -57,9 +57,21 @@ _CSS = """
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
-/* hide Streamlit's own chrome (header bar, Deploy button, hamburger menu) — we own the page */
+/* hide Streamlit's own chrome (Deploy button, hamburger menu) — we own the page.
+   NOTE: hide only stToolbarActions, NOT the whole stToolbar — the toolbar also holds
+   the reopen-sidebar arrow, and hiding it would strand users with no navigation */
 header[data-testid="stHeader"]{ background:transparent; }
-[data-testid="stToolbar"]{ display:none; }
+[data-testid="stToolbarActions"],
+[data-testid="stAppDeployButton"],
+[data-testid="stMainMenu"]{ display:none; }
+
+/* make the reopen-sidebar arrow impossible to miss: a glowing mint chip, top-left */
+[data-testid="stExpandSidebarButton"]{
+    background:rgba(52,245,197,.10);
+    border:1px solid var(--mint-soft); border-radius:10px;
+    box-shadow:0 0 16px rgba(52,245,197,.20);
+}
+[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"]{ color:var(--mint); }
 
 /* give content a little room at the top now the header is gone */
 .block-container{ padding-top:3rem; }

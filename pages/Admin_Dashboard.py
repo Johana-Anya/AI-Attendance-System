@@ -19,6 +19,7 @@ st.set_page_config(                                           # must be the firs
     page_title="Admin Console — VERIFACE",                    # browser-tab title
     page_icon="🟢",                                           # browser-tab icon
     layout="wide",                                            # dashboards want the full screen width
+    initial_sidebar_state="expanded",                         # always open the nav sidebar on arrival
 )
 
 ui.inject_css()                                               # apply the theme
