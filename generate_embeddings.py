@@ -1,90 +1,25 @@
-import os
-import pickle
-import sys
+# generate_embeddings.py — rebuilds embeddings.pkl from every photo in images/
+# normally not needed (registration saves embeddings live) — use this to recover after losing the .pkl file
+# run it with:  python generate_embeddings.py
 
-project_root = os.path.dirname(
-    os.path.dirname(os.path.abspath(__file__))
-)
+import os                                                     # built-in library for listing files
 
-sys.path.append(project_root)
+import face_utils                                             # our face module (model + save/load helpers)
 
-from face_utils import get_embedding
-sys.path.append(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.abspath(__file__)
-        )
-    )
-)
+IMAGES_DIR = "images"                                         # folder holding one photo per student, named <student_id>.jpg
 
-from face_utils import get_embedding
+embeddings = {}                                               # will hold {student_id: face fingerprint}
 
-embeddings = {}
+for filename in os.listdir(IMAGES_DIR):                       # walk through every file in the images folder
+    student_id = os.path.splitext(filename)[0]                # '23AIDS001.jpg' → '23AIDS001'
+    path = os.path.join(IMAGES_DIR, filename)                 # full path to the photo
+    embedding = face_utils.embedding_from_file(path)          # photo → face fingerprint (None if no face found)
+    if embedding is None:                                     # the model could not find a face in this photo
+        print(f"  ✗ {filename}: no face detected, skipped")   # report it instead of crashing
+        continue                                              # move on to the next photo
+    embeddings[student_id] = embedding                        # store this student's fingerprint
+    print(f"  ✓ {filename}: embedded")                        # progress line per photo
 
-for img in os.listdir("images"):
+face_utils.save_embeddings(embeddings)                        # write the whole dictionary to embeddings.pkl
 
-    path = os.path.join(
-        "images",
-        img
-    )
-
-    student_id = img.split(".")[0]
-
-    emb = get_embedding(path)
-
-    if emb is not None:
-
-        embeddings[
-            student_id
-        ] = emb
-
-with open(
-    "embeddings.pkl",
-    "wb"
-) as f:
-
-    pickle.dump(
-        embeddings,
-        f
-    )
-
-print(
-    "Embeddings Saved"
-)
-import os
-import pickle
-
-from face_utils import get_embedding
-
-embeddings = {}
-
-for img in os.listdir(
-    "images"
-):
-
-    path = os.path.join(
-        "images",
-        img
-    )
-
-    sid = img.split(".")[0]
-
-    emb = get_embedding(path)
-
-    if emb is not None:
-
-        embeddings[sid] = emb
-
-with open(
-    "embeddings.pkl",
-    "wb"
-) as f:
-
-    pickle.dump(
-        embeddings,
-        f
-    )
-
-print(
-    "Embeddings Created"
-)
+print(f"Done — {len(embeddings)} embedding(s) saved to {face_utils.EMBEDDINGS_PATH}")  # summary

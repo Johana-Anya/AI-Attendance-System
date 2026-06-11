@@ -1,0 +1,19 @@
+# Python's compiled bytecode cache
+__pycache__/
+*.pyc
+
+# the live database (personal data — regenerate with create_database.py)
+attendance.db
+
+# biometric face data (regenerate with generate_embeddings.py)
+embeddings.pkl
+
+# student face photos (personal data)
+images/
+
+# exported reports
+*.xlsx
+
+# local virtual environments
+.venv/
+venv/

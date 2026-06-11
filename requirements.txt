@@ -1,0 +1,8 @@
+# requirements.txt — install everything with:  pip install -r requirements.txt
+streamlit>=1.36       # the web framework the whole UI runs on
+insightface>=0.7.3    # the face detection + recognition model
+onnxruntime>=1.17     # the engine insightface uses to run its neural networks on CPU
+opencv-python>=4.9    # image decoding (camera bytes -> pixel arrays)
+numpy>=1.26           # vector math for face matching
+pandas>=2.0           # tables for dashboards and reports
+plotly>=5.20          # interactive charts

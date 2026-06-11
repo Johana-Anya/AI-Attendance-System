@@ -1,50 +1,22 @@
-import sqlite3
+# create_database.py — one-time setup: builds the tables and seeds the admin login
+# run it with:  python create_database.py
 
-conn = sqlite3.connect("attendance.db")
-cursor = conn.cursor()
+import auth                                                   # our password-hashing module
+import db                                                     # our database module
 
-# Users table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT,
-    role TEXT
-)
-""")
+db.init_db()                                                  # create users / students / attendance tables if missing
 
-# Students table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS students(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    student_id TEXT UNIQUE,
-    name TEXT,
-    department TEXT,
-    image_path TEXT
-)
-""")
+ADMIN_USER = "admin"                                          # the default admin username
+ADMIN_PASS = "admin123"                                       # the default admin password (change it after first login!)
 
-# Attendance table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS attendance(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    student_id TEXT,
-    name TEXT,
-    date TEXT,
-    time TEXT
-)
-""")
+if db.get_user(ADMIN_USER) is None:                           # only seed if no admin account exists yet
+    db.create_user(                                           # insert the admin login row
+        ADMIN_USER,                                           # username
+        auth.hash_password(ADMIN_PASS),                       # store the salted HASH, never the plain password
+        "admin",                                              # role
+    )
+    print(f"Admin account created: {ADMIN_USER} / {ADMIN_PASS}")  # tell the person running the script
+else:                                                         # an admin already exists
+    print("Admin account already exists - nothing to do.")    # no changes made
 
-# Admin Login
-cursor.execute("""
-INSERT OR IGNORE INTO users
-(username,password,role)
-VALUES
-('admin','admin123','admin')
-""")
-
-conn.commit()
-conn.close()
-
-print("Database Created Successfully")
-
+print("Database ready at:", db.DB_PATH)                       # show exactly which file was created

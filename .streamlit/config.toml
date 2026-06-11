@@ -1,0 +1,14 @@
+# .streamlit/config.toml — Streamlit's own settings for this app
+
+[client]
+showSidebarNavigation = false   # hide Streamlit's automatic page list; we navigate with st.switch_page after login
+
+[theme]
+base = "dark"                   # start from Streamlit's dark theme
+primaryColor = "#34F5C5"        # the mint accent (focus rings, sliders, etc.)
+backgroundColor = "#070B0F"     # near-black page background
+secondaryBackgroundColor = "#0D141C"  # panels, sidebar, input wells
+textColor = "#E8F4EE"           # main text colour
+
+[browser]
+gatherUsageStats = false        # don't send usage statistics to Streamlit
